@@ -1,5 +1,4 @@
 
-
 let photos = document.querySelector(".photos");
 let images = document.querySelectorAll(".photos > img");
 
@@ -16,15 +15,14 @@ let counter = 0;
 let arr =[];
 
 
-images.forEach(item =>{
-	++counter;
-	arr.push(item.getAttribute('src')); // получаем массыв путей фотографии
-	item.setAttribute('data-set', counter - 1 ); //присваем data-set для каждой фотографии
-});
-
 
 // перебор фото и добавляем слушатель клика, получаем data-set фотки вызов ф-и формирования модалки
 images.forEach(slide =>{
+
+	++counter;
+	arr.push(slide.getAttribute('src')); // получаем массыв путей фотографии
+	slide.setAttribute('data-set', counter - 1 ); //присваем data-set для каждой фотографии
+
 	slide.addEventListener('click', function(e){
 		e.preventDefault;
 		let posElem = +slide.getAttribute('data-set');
@@ -44,37 +42,42 @@ function modalBox(posElem){
 		modalImg.style.opacity = '1';
 		arrow.style.display = "block";
 		
-		// кнопка вперед парамтр позиции
-		next.addEventListener('click', function(e){
-			e.preventDefault;
-			posElem++;
-		if(posElem > arr.length -1){// если последняя, то сначала
-			posElem = 0;
-		}
-		callBackModal(posElem);// вызов ф-и типа коллбэк
-		});
+			
+			// кнопка вперед парамтр позиции
+				next.addEventListener('click', function(e){
+						e.preventDefault;
+						posElem++;
+					if(posElem > arr.length -1){// если последняя, то сначала
+						posElem = 0;
+					}
+					photoIndex(posElem);// вызов ф-и типа коллбэк
+					});
+	
 
-		// кнопка назад (парамтр) позиции
-				prev.addEventListener('click', function(e){
+	// кнопка назад (парамтр) позиции
+			prev.addEventListener('click', function(e){
 					e.preventDefault;
 					posElem--;
 				if(posElem == -1){ // если первая, то сконца
 					return posElem = arr.length;
 				}
-				callBackModal(posElem); // вызов ф-и типа коллбэк
+				photoIndex(posElem); // вызов ф-и типа коллбэк
 				});
 }
 
 
 //типа коллбэк
-function callBackModal(posElem){
-return modalBox(posElem);
+function photoIndex(posElem) {
+	modalImg.setAttribute('src', arr[posElem]);  // получаем фото из массива по индексу
 }
+		
+
 
 
 // закрываем модалку
 lay.addEventListener('click', closed);
 close.addEventListener('click', closed);
+modal.addEventListener('click', closed);
 
 function closed(){
 		lay.classList.remove('bg');
